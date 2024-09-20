@@ -8,3 +8,9 @@ Written by following along Andrej Karparthy's "Neural Networks: Zero to Hero" co
 
 ### Credits
 1. [@karpathy](https://github.com/karpathy)
+
+
+
+## WIP TODO's
+- test all back prop stuff correctly. Confirm derivative eqns correct
+- figure out a way to free memory for neurons/layers (de-init proc or arena allocator with free_all)

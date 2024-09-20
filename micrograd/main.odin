@@ -1,7 +1,7 @@
 package micrograd
-
 import "core:fmt"
 import "core:mem"
+
 
 main :: proc() {
 	when ODIN_DEBUG {
@@ -25,27 +25,11 @@ main :: proc() {
 			mem.tracking_allocator_destroy(&track)
 		}
 	}
-
-	// // Inputes
-	x1 := value(2.0)
-	x2 := value(0.0)
-	// weights
-	w1 := value(-3.0)
-	w2 := value(1.0)
-	// neuron bias
-	b := value(6.8813735870195432)
-
-	x1w1 := mult(&x1, &w1)
-	x2w2 := mult(&x2, &w2)
-	x1w1_x2w2 := add(&x1w1, &x2w2)
-	n := add(&x1w1_x2w2, &b)
-	fmt.print("n:")
-	print_value(n)
-	o := tanh(&n)
-	o.grad = 1.0
-	print_value(o)
-	backward(&o)
-	fmt.print("n:")
-	print_value(n)
-	//
+	alloc := context.allocator
+	defer free_all(alloc)
+	xs := []f64{1.0, 2.0}
+	l := layer(2, 3, alloc)
+	fmt.println(l)
+	l_forward(&l, xs, alloc)
+	fmt.println(l)
 }
