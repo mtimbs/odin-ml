@@ -38,18 +38,14 @@ test_nueron_initialisation :: proc(t: ^testing.T) {
 	testing.expect_value(t, neuron_5.num_weights, 5)
 }
 
-n_forward :: proc(neuron: ^Neuron, xs: []f64) -> Value {
-	assert(
-		len(xs) == len(neuron.weights),
-		"values must be of same length as Neuron weights ({},{})",
-	)
+n_forward :: proc(neuron: ^Neuron, xs: []Value) -> Value {
+	assert(len(xs) == len(neuron.weights), "values must be of same length as Neuron weights")
 	// We could initialise this to 0 and add a bias later but can also just
 	// initialise this to the bias immediately and save a layer of recursion
-	activation := value(neuron.bias.val)
+	activation := neuron.bias
 
 	for i in 0 ..< neuron.num_weights {
-		tmp := value(xs[i])
-		prod := mult(&neuron.weights[i], &tmp)
+		prod := mult(&neuron.weights[i], &xs[i])
 		activation = add(&activation, &prod)
 	}
 
@@ -63,14 +59,14 @@ test_n_forward :: proc(t: ^testing.T) {
 	n := neuron(2, test_allocator)
 	w1 := n.weights[0].val
 	w2 := n.weights[1].val
-	x1 := f64(1.0)
-	x2 := f64(2.0)
+	x1 := value(1.0)
+	x2 := value(2.0)
 	bias := n.bias.val
 
-	sum := n_forward(&n, []f64{x1, x2})
+	sum := n_forward(&n, {x1, x2})
 
 	// This is what we expect the activation to be before running through tanh
-	activation := value((x1 * w1 + x2 * w2) + bias)
+	activation := value((x1.val * w1 + x2.val * w2) + bias)
 	expected := tanh(&activation).val
 	testing.expect_value(t, expected, sum.val)
 }

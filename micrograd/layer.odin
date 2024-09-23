@@ -23,7 +23,7 @@ test_layer_initialisation :: proc(t: ^testing.T) {
 	// TODO
 }
 
-l_forward :: proc(layer: ^Layer, xs: []f64, allocator := context.allocator) -> []Value {
+l_forward :: proc(layer: ^Layer, xs: []Value, allocator := context.allocator) -> []Value {
 	outputs := make([]Value, layer.num_neurons, allocator)
 
 	for &neuron, i in layer.neurons {
@@ -37,9 +37,10 @@ l_forward :: proc(layer: ^Layer, xs: []f64, allocator := context.allocator) -> [
 test_l_forward :: proc(t: ^testing.T) {
 	test_allocator := context.allocator
 	defer free_all(test_allocator)
-	xs := []f64{1.0, 2.0}
+	x1 := value(1.0)
+	x2 := value(2.0)
 	l := layer(2, 3, test_allocator)
-	outputs := l_forward(&l, xs, test_allocator)
+	outputs := l_forward(&l, {x1, x2}, test_allocator)
 
 	// This is what we expect the activation to be before running through tanh
 	testing.expect_value(t, len(outputs), 3)

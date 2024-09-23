@@ -12,5 +12,9 @@ Written by following along Andrej Karparthy's "Neural Networks: Zero to Hero" co
 
 
 ## WIP TODO's
-- test all back prop stuff correctly. Confirm derivative eqns correct
-- figure out a way to free memory for neurons/layers (de-init proc or arena allocator with free_all)
+- refactor all the engine layer to return pointers to values instead.
+- use new(Value) and return the pointer
+(1:55)
+- loss function of values (MSE)
+- parameters function for neuron, layer, mlp
+- raylib visualisation
