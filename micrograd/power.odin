@@ -5,8 +5,10 @@ import "core:math"
 import "core:testing"
 
 
-pow :: proc(a: ^Value, b: ^Value) -> Value {
-	return Value{math.pow(a.val, b.val), 0.0, {a, b}, .power}
+pow :: proc(a: ^Value, b: ^Value) -> ^Value {
+	value := new(Value)
+	value^ = Value{math.pow(a.val, b.val), 0.0, {a, b}, .power}
+	return value
 }
 
 

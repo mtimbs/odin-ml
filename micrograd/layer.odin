@@ -5,17 +5,18 @@ import "core:math/rand"
 import "core:testing"
 
 Layer :: struct {
-	neurons:     []Neuron,
+	neurons:     []^Neuron,
 	num_neurons: i64,
 }
 
-layer :: proc(num_inputs: i64, num_neurons: i64, allocator := context.allocator) -> Layer {
-	neurons := make([]Neuron, num_neurons, allocator)
+layer :: proc(num_inputs: i64, num_neurons: i64) -> ^Layer {
+	neurons := make([]^Neuron, num_neurons)
 	for i in 0 ..< num_neurons {
-		neurons[i] = neuron(num_inputs, allocator)
+		neurons[i] = neuron(num_inputs)
 	}
-
-	return Layer{neurons, num_neurons}
+	layer := new(Layer)
+	layer^ = Layer{neurons, num_neurons}
+	return layer
 }
 
 @(test)
@@ -23,11 +24,11 @@ test_layer_initialisation :: proc(t: ^testing.T) {
 	// TODO
 }
 
-l_forward :: proc(layer: ^Layer, xs: []Value, allocator := context.allocator) -> []Value {
-	outputs := make([]Value, layer.num_neurons, allocator)
+l_forward :: proc(layer: ^Layer, xs: []^Value) -> []^Value {
+	outputs := make([]^Value, layer.num_neurons)
 
 	for &neuron, i in layer.neurons {
-		outputs[i] = n_forward(&neuron, xs)
+		outputs[i] = n_forward(neuron, xs)
 	}
 
 	return outputs
@@ -39,8 +40,8 @@ test_l_forward :: proc(t: ^testing.T) {
 	defer free_all(test_allocator)
 	x1 := value(1.0)
 	x2 := value(2.0)
-	l := layer(2, 3, test_allocator)
-	outputs := l_forward(&l, {x1, x2}, test_allocator)
+	l := layer(2, 3)
+	outputs := l_forward(l, {x1, x2})
 
 	// This is what we expect the activation to be before running through tanh
 	testing.expect_value(t, len(outputs), 3)

@@ -37,9 +37,11 @@ build_topology :: proc(
 @(test)
 test_build_topology :: proc(t: ^testing.T) {
 	// Assemble
+	test_allocator := context.allocator
+	defer free_all(test_allocator)
 	a := value(1.0)
 	b := value(2.0)
-	c := add(&a, &b)
+	c := add(a, b)
 
 	topo := make([]^Value, 3)
 	visited := make([]^Value, 3)
@@ -49,12 +51,12 @@ test_build_topology :: proc(t: ^testing.T) {
 	topo_count := i32(0)
 
 	// Act
-	build_topology(&c, &topo, &topo_count, &visited, &visit_count)
+	build_topology(c, &topo, &topo_count, &visited, &visit_count)
 
 	// Assert
-	testing.expect(t, topo[0]^ == a)
-	testing.expect(t, topo[1]^ == b)
-	testing.expect(t, topo[2]^ == c)
+	testing.expect(t, topo[0] == a)
+	testing.expect(t, topo[1] == b)
+	testing.expect(t, topo[2] == c)
 }
 
 
@@ -97,7 +99,7 @@ test_backward_value_no_ops :: proc(t: ^testing.T) {
 	a := value(5.0)
 
 	// Act
-	backward(&a, test_allocator)
+	backward(a, test_allocator)
 
 	// Assert
 	// Grad is 1.0 because thats what we default the root node grad to in
@@ -112,10 +114,10 @@ test_backward_same_node :: proc(t: ^testing.T) {
 	test_allocator := context.allocator
 	defer free_all(test_allocator)
 	a := value(3.0)
-	s := add(&a, &a)
+	s := add(a, a)
 
 	// Act
-	backward(&s, test_allocator)
+	backward(s, test_allocator)
 
 	// Assert
 	testing.expect(t, utils.compare_f64(a.grad, 2.0))
@@ -129,12 +131,12 @@ test_backward_shared_nodes :: proc(t: ^testing.T) {
 	defer free_all(test_allocator)
 	a := value(-2.0)
 	b := value(3.0)
-	d := mult(&a, &b)
-	e := add(&a, &b)
-	f := mult(&d, &e)
+	d := mult(a, b)
+	e := add(a, b)
+	f := mult(d, e)
 
 	// Act
-	backward(&f, test_allocator)
+	backward(f, test_allocator)
 
 	// Assert
 	testing.expect(t, utils.compare_f64(a.grad, -3.0))

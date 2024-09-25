@@ -6,11 +6,13 @@ import "core:math"
 import "core:testing"
 
 
-tanh :: proc(val: ^Value) -> Value {
+tanh :: proc(val: ^Value) -> ^Value {
 	x := val.val
 	t := (math.exp(2.0 * x) - 1.0) / (math.exp(2 * x) + 1)
 	// Second child for tanh is nil as it only applies to a single value
-	return Value{t, 0.00, {val, nil}, .tanh}
+	value := new(Value)
+	value^ = Value{t, 0.00, {val, nil}, .tanh}
+	return value
 }
 
 
@@ -23,14 +25,16 @@ backward_tanh :: proc(val: ^Value) {
 @(test)
 test_backward_tanh :: proc(t: ^testing.T) {
 	// Assemble
+	test_allocator := context.allocator
+	defer free_all(test_allocator)
 	a := value(0.88137358701954316)
-	b := tanh(&a)
+	b := tanh(a)
 	b.grad = 1.0
 	print_value(a)
 	print_value(b)
 
 	// Act
-	backward_tanh(&b)
+	backward_tanh(b)
 
 	// Assert
 	testing.expect(t, utils.compare_f64(a.grad, 0.5))

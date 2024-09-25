@@ -4,9 +4,11 @@ import utils "../utils"
 import "core:math"
 import "core:testing"
 
-div :: proc(a: ^Value, b: ^Value) -> Value {
+div :: proc(a: ^Value, b: ^Value) -> ^Value {
 	assert(b.val != 0.0, "Divide by zero error")
-	return Value{a.val / b.val, 0.0, {a, b}, .divide}
+	value := new(Value)
+	value^ = Value{a.val / b.val, 0.0, {a, b}, .divide}
+	return value
 }
 
 

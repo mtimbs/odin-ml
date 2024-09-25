@@ -24,17 +24,21 @@ Value :: struct {
 }
 
 
-value :: proc(x: f64) -> Value {
-	return Value{x, 0.0, {}, .value}
+value :: proc(x: f64) -> ^Value {
+	value := new(Value)
+	value^ = Value{x, 0.0, {}, .value}
+	return value
 }
 
-print_value :: proc(val: Value) {
+print_value :: proc(val: ^Value) {
 	fmt.printfln("Value(val: {}, grad: {}", val.val, val.grad)
 }
 
 @(test)
 test_value_initialisation :: proc(t: ^testing.T) {
 	// Assemble
+	test_allocator := context.allocator
+	defer free_all(test_allocator)
 	input := 5.0
 	// Act
 	output := value(input)

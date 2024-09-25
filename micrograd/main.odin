@@ -37,29 +37,29 @@ main :: proc() {
 	// n := mlp(3, {4, 4, 1}, context.allocator)
 	// mlp_forward(&n, xs)
 
-	xs := [][]Value {
+	xs := [][]^Value {
 		{value(2.0), value(3.0), value(-1.0)},
 		{value(3.0), value(-1.0), value(0.5)},
 		{value(0.5), value(1.0), value(1.0)},
 		{value(1.0), value(1.0), value(-1.0)},
 	}
-	ys := []Value{value(1.0), value(-1.0), value(-1.0), value(1.0)}
+	ys := []^Value{value(1.0), value(-1.0), value(-1.0), value(1.0)}
 
-	y_pred: [4]Value
+	y_pred: [4]^Value
 	for &x, i in xs {
-		n := neuron(3, context.allocator)
-		y_pred[i] = n_forward(&n, x)
+		n := neuron(3)
+		y_pred[i] = n_forward(n, x)
 
 	}
 
-	loss: Value
-	diff: [4]Value
+	loss: ^Value
+	diff: [4]^Value
 	two := value(2.0)
 	fmt.println("y_pred:", y_pred)
 	// TODO: This is all broken. Refer to readme for todo fixes
 	for &y, i in y_pred {
-		diff[i] = sub(&y, &ys[i])
-		loss = pow(&diff[i], &two)
+		diff[i] = sub(y, ys[i])
+		loss = pow(diff[i], two)
 	}
 	fmt.println("loss:", loss)
 
