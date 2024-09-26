@@ -60,9 +60,9 @@ test_build_topology :: proc(t: ^testing.T) {
 }
 
 
-backward :: proc(val: ^Value, allocator := context.allocator) {
-	topo := make([]^Value, MAXIMUM_NODE_COUNT, allocator)
-	visited := make([]^Value, MAXIMUM_NODE_COUNT, allocator)
+backward :: proc(val: ^Value) {
+	topo := make([]^Value, MAXIMUM_NODE_COUNT)
+	visited := make([]^Value, MAXIMUM_NODE_COUNT)
 	visit_count := i32(0)
 	topo_count := i32(0)
 
@@ -99,7 +99,7 @@ test_backward_value_no_ops :: proc(t: ^testing.T) {
 	a := value(5.0)
 
 	// Act
-	backward(a, test_allocator)
+	backward(a)
 
 	// Assert
 	// Grad is 1.0 because thats what we default the root node grad to in
@@ -117,7 +117,7 @@ test_backward_same_node :: proc(t: ^testing.T) {
 	s := add(a, a)
 
 	// Act
-	backward(s, test_allocator)
+	backward(s)
 
 	// Assert
 	testing.expect(t, utils.compare_f64(a.grad, 2.0))
@@ -136,7 +136,7 @@ test_backward_shared_nodes :: proc(t: ^testing.T) {
 	f := mult(d, e)
 
 	// Act
-	backward(f, test_allocator)
+	backward(f)
 
 	// Assert
 	testing.expect(t, utils.compare_f64(a.grad, -3.0))

@@ -4,7 +4,7 @@ import utils "../utils"
 import "core:fmt"
 import "core:testing"
 
-MAXIMUM_NODE_COUNT :: 100
+MAXIMUM_NODE_COUNT :: 10000
 
 Op :: enum {
 	add,

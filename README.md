@@ -12,9 +12,9 @@ Written by following along Andrej Karparthy's "Neural Networks: Zero to Hero" co
 
 
 ## WIP TODO's
-- refactor all the engine layer to return pointers to values instead.
-- use new(Value) and return the pointer
-(1:55)
+- return params for Neuron. Layer, MLP etc (slice concat?)
 - loss function of values (MSE)
 - parameters function for neuron, layer, mlp
 - raylib visualisation
+
+- investigate if I can just put the params as part of the struct definition during initialisation instead of create a procedure to generate them... They are just pointers to `Value` structs anyway.....

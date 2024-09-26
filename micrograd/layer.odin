@@ -7,6 +7,7 @@ import "core:testing"
 Layer :: struct {
 	neurons:     []^Neuron,
 	num_neurons: i64,
+	num_params:  i64,
 }
 
 layer :: proc(num_inputs: i64, num_neurons: i64) -> ^Layer {
@@ -15,7 +16,7 @@ layer :: proc(num_inputs: i64, num_neurons: i64) -> ^Layer {
 		neurons[i] = neuron(num_inputs)
 	}
 	layer := new(Layer)
-	layer^ = Layer{neurons, num_neurons}
+	layer^ = Layer{neurons, num_neurons, 0}
 	return layer
 }
 
@@ -45,4 +46,29 @@ test_l_forward :: proc(t: ^testing.T) {
 
 	// This is what we expect the activation to be before running through tanh
 	testing.expect_value(t, len(outputs), 3)
+}
+
+l_params :: proc(layer: ^Layer) -> []^Value {
+	num_params := i64(0)
+	for n in layer.neurons {
+		num_params += (n.num_weights + 1)
+	}
+
+	params := make([]^Value, num_params)
+	i := 0
+	for n in layer.neurons {
+		for p in n_params(n) {
+			params[i] = p
+			i += 1
+		}
+	}
+
+	return params
+}
+
+@(test)
+test_l_params :: proc(t: ^testing.T) {
+	test_allocator := context.allocator
+	defer free_all(test_allocator)
+	// TODO
 }

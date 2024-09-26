@@ -47,8 +47,7 @@ n_forward :: proc(neuron: ^Neuron, xs: []^Value) -> ^Value {
 	activation := neuron.bias
 
 	for i in 0 ..< neuron.num_weights {
-		prod := mult(neuron.weights[i], xs[i])
-		activation = add(activation, prod)
+		activation = add(activation, mult(neuron.weights[i], xs[i]))
 	}
 
 	return tanh(activation)
@@ -71,4 +70,21 @@ test_n_forward :: proc(t: ^testing.T) {
 	activation := value((x1.val * w1 + x2.val * w2) + bias)
 	expected := tanh(activation).val
 	testing.expect_value(t, expected, sum.val)
+}
+
+n_params :: proc(neuron: ^Neuron) -> []^Value {
+	params := make([]^Value, neuron.num_weights + 1)
+	for i in 0 ..< neuron.num_weights {
+		params[i] = neuron.weights[i]
+	}
+	params[neuron.num_weights] = neuron.bias
+
+	return params
+}
+
+@(test)
+test_n_params :: proc(t: ^testing.T) {
+	test_allocator := context.allocator
+	defer free_all(test_allocator)
+	// TODO
 }
