@@ -4,6 +4,7 @@ import utils "../utils"
 import "core:math"
 import "core:testing"
 
+@(private)
 div :: proc(a: ^Value, b: ^Value) -> ^Value {
 	assert(b.val != 0.0, "Divide by zero error")
 	value := new(Value)

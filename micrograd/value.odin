@@ -4,6 +4,7 @@ import utils "../utils"
 import "core:fmt"
 import "core:testing"
 
+@(private)
 MAXIMUM_NODE_COUNT :: 10000
 
 Op :: enum {
@@ -22,7 +23,6 @@ Value :: struct {
 	children: [2]^Value,
 	op:       Op,
 }
-
 
 value :: proc(x: f64) -> ^Value {
 	value := new(Value)

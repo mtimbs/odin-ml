@@ -5,12 +5,14 @@ import "core:math/rand"
 import "core:mem"
 import "core:testing"
 
+@(private)
 Neuron :: struct {
 	weights:     []^Value,
 	num_weights: i64,
 	bias:        ^Value,
 }
 
+@(private)
 neuron :: proc(num_weights: i64) -> ^Neuron {
 	weights := make([]^Value, num_weights)
 	for i in 0 ..< num_weights {
@@ -40,6 +42,7 @@ test_nueron_initialisation :: proc(t: ^testing.T) {
 	testing.expect_value(t, neuron_5.num_weights, 5)
 }
 
+@(private)
 n_forward :: proc(neuron: ^Neuron, xs: []^Value) -> ^Value {
 	assert(len(xs) == len(neuron.weights), "values must be of same length as Neuron weights")
 	// We could initialise this to 0 and add a bias later but can also just
@@ -72,6 +75,7 @@ test_n_forward :: proc(t: ^testing.T) {
 	testing.expect_value(t, expected, sum.val)
 }
 
+@(private)
 n_params :: proc(neuron: ^Neuron) -> []^Value {
 	params := make([]^Value, neuron.num_weights + 1)
 	for i in 0 ..< neuron.num_weights {

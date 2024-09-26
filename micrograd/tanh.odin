@@ -5,7 +5,7 @@ import "core:fmt"
 import "core:math"
 import "core:testing"
 
-
+@(private)
 tanh :: proc(val: ^Value) -> ^Value {
 	x := val.val
 	t := (math.exp(2.0 * x) - 1.0) / (math.exp(2 * x) + 1)

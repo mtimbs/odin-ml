@@ -9,7 +9,6 @@ MLP :: struct {
 	num_layers: i64,
 }
 
-// mlp(3, [4,4,1])
 mlp :: proc(num_inputs: i64, layer_outs: []i64) -> MLP {
 	layers := make([]^Layer, len(layer_outs))
 	layers[0] = layer(num_inputs, layer_outs[0])
@@ -20,6 +19,7 @@ mlp :: proc(num_inputs: i64, layer_outs: []i64) -> MLP {
 	return MLP{layers, num_layers}
 }
 
+@(private)
 mlp_forward :: proc(mlp: ^MLP, xs: []^Value) -> []^Value {
 	outs := xs
 	for &layer, i in mlp.layers {
@@ -37,6 +37,7 @@ test_mlp_initialisation :: proc(t: ^testing.T) {
 
 }
 
+@(private)
 params :: proc(mlp: ^MLP) -> []^Value {
 	num_params := 0
 	for l in mlp.layers {

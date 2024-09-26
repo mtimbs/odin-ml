@@ -4,7 +4,7 @@ import utils "../utils"
 import "core:math"
 import "core:testing"
 
-@(private)
+@(private = "file")
 build_topology :: proc(
 	val: ^Value,
 	topo: ^[]^Value,
@@ -59,7 +59,7 @@ test_build_topology :: proc(t: ^testing.T) {
 	testing.expect(t, topo[2] == c)
 }
 
-
+@(private)
 backward :: proc(val: ^Value) {
 	topo := make([]^Value, MAXIMUM_NODE_COUNT)
 	visited := make([]^Value, MAXIMUM_NODE_COUNT)
