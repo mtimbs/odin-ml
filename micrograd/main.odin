@@ -33,16 +33,18 @@ main :: proc() {
 	}
 
 
-	xs := [][]^Value {
-		{value(2.0), value(3.0), value(-1.0)},
-		{value(3.0), value(-1.0), value(0.5)},
-		{value(0.5), value(1.0), value(1.0)},
-		{value(1.0), value(1.0), value(-1.0)},
-	}
-	ys := []^Value{value(1.0), value(-1.0), value(-1.0), value(1.0)}
-	nn := mlp(3, {4, 4, 1})
+	// xs := [][]^Value {
+	// 	{value(2.0), value(3.0), value(-1.0)},
+	// 	{value(3.0), value(-1.0), value(0.5)},
+	// 	{value(0.5), value(1.0), value(1.0)},
+	// 	{value(1.0), value(1.0), value(-1.0)},
+	// }
+	// ys := []^Value{value(1.0), value(-1.0), value(-1.0), value(1.0)}
+	// nn := mlp(3, {4, 4, 1})
 
-	train(xs, ys, &nn)
+	// train(xs, ys, &nn)
+
+	visualise()
 
 	free_all(context.allocator)
 }
