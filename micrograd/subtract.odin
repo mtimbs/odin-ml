@@ -5,7 +5,6 @@ import "core:fmt"
 import "core:math"
 import "core:testing"
 
-@(private)
 sub :: proc(a: ^Value, b: ^Value) -> ^Value {
 	value := new(Value)
 	value^ = Value{a.val - b.val, 0.0, {a, b}, .subtract}

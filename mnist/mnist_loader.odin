@@ -38,37 +38,18 @@ read_mnist_images :: proc(filepath: string, images: ^[60000][28 * 28]u8) -> (ok:
 
 	num_rows := endian.get_u32(image_data[8:12], endian.Byte_Order.Big) or_return
 	assert(num_rows == 28)
+
 	num_cols := endian.get_u32(image_data[12:16], endian.Byte_Order.Big) or_return
 	assert(num_cols == 28)
 
 
-	for i in 0 ..< 1 {
+	for i in 0 ..< 60000 {
 		for j in 0 ..< 28 * 28 {
 			val := image_data[(16 + i) * j]
 			images[i][j] = val
 		}
-
 	}
 
 	return true
 
-}
-
-main :: proc() {
-	labels := new([60000]u8)
-	images := new([60000][28 * 28]u8)
-
-	label_ok := read_mnist_labels(TRAINING_LABEL_PATH, labels)
-	if (!label_ok) {
-		fmt.println("Error loading label data")
-		return
-	}
-	images_ok := read_mnist_images(TRAINING_IMAGES_PATH, images)
-	if (!images_ok) {
-		fmt.println("Error loading image data")
-		return
-	}
-
-	fmt.println("First data label", labels[0])
-	fmt.println("First data image", images[0])
 }

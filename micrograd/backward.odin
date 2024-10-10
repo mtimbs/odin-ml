@@ -1,6 +1,7 @@
 package micrograd
 
 import utils "../utils"
+import "core:fmt"
 import "core:math"
 import "core:testing"
 
@@ -22,7 +23,7 @@ build_topology :: proc(
 	// Mark it as visited and increment our visited size counter
 	visited[visited_size^] = val
 	visited_size^ += 1
-
+	fmt.println("Visited size:", visited_size^)
 	for child in val.children {
 		// recurse for each child
 		if (child != nil) {
@@ -32,6 +33,7 @@ build_topology :: proc(
 	// add to topology and icnrement size counter
 	topo[topo_size^] = val
 	topo_size^ += 1
+	fmt.println("Topology size:", topo_size^)
 }
 
 @(test)
@@ -59,7 +61,6 @@ test_build_topology :: proc(t: ^testing.T) {
 	testing.expect(t, topo[2] == c)
 }
 
-@(private)
 backward :: proc(val: ^Value) {
 	topo := make([]^Value, MAXIMUM_NODE_COUNT)
 	visited := make([]^Value, MAXIMUM_NODE_COUNT)
@@ -67,6 +68,8 @@ backward :: proc(val: ^Value) {
 	topo_count := i32(0)
 
 	build_topology(val, &topo, &topo_count, &visited, &visit_count)
+
+	fmt.println("Total number of nodes:", visit_count)
 
 	// need to set the gradient to 1.0 so that we can backprop
 	val.grad = 1.0
@@ -80,6 +83,8 @@ backward :: proc(val: ^Value) {
 			backward_mult(node)
 		case .power:
 			backward_power(node)
+		case .relu:
+			backward_relu(node)
 		case .subtract:
 			backward_subtract(node)
 		case .tanh:

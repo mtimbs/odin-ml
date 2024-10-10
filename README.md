@@ -2,13 +2,6 @@
 
 Collection of AI/Machine Learning code written in Odin.
 
-## Micrograd
-Odin implementation of [micrograd](https://github.com/karpathy/micrograd/tree/master/micrograd).
-Written by following along Andrej Karparthy's "Neural Networks: Zero to Hero" course [YouTube](https://www.youtube.com/watch?v=VMj-3S1tku0&list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ).
+This is not intended for production use. This is a resource for me to really understand what is going on under the hood in libraries like PyTorch, TinyGrad, JAX, MLX etc.
 
-### TODO:
-- raylib visualisation
-- investigate if I can just put the params as part of the struct definition during initialisation instead of create a procedure to generate them... They are just pointers to `Value` structs anyway.....
-
-### Credits
-1. [@karpathy](https://github.com/karpathy)
+Over time this will hopefully start to approach the usability of those kinds of libraries but without the need of universality. Ultimately I want to be able to train NN and do RL without needing to write Python.

@@ -9,17 +9,25 @@ MLP :: struct {
 	num_layers: i64,
 }
 
-mlp :: proc(num_inputs: i64, layer_outs: []i64) -> MLP {
+LayerOutputs :: struct {
+	num_outputs:   i64,
+	activation_fn: Activation,
+}
+
+mlp :: proc(num_inputs: i64, layer_outs: []LayerOutputs) -> MLP {
 	layers := make([]^Layer, len(layer_outs))
-	layers[0] = layer(num_inputs, layer_outs[0])
+	layers[0] = layer(num_inputs, layer_outs[0].num_outputs, layer_outs[0].activation_fn)
 	for i in 1 ..< len(layer_outs) {
-		layers[i] = layer(layer_outs[i - 1], layer_outs[i])
+		layers[i] = layer(
+			layer_outs[i - 1].num_outputs,
+			layer_outs[i].num_outputs,
+			layer_outs[i].activation_fn,
+		)
 	}
 	num_layers := i64(len(layer_outs))
 	return MLP{layers, num_layers}
 }
 
-@(private)
 mlp_forward :: proc(mlp: ^MLP, xs: []^Value) -> []^Value {
 	outs := xs
 	for &layer, i in mlp.layers {
@@ -33,11 +41,10 @@ mlp_forward :: proc(mlp: ^MLP, xs: []^Value) -> []^Value {
 test_mlp_initialisation :: proc(t: ^testing.T) {
 	test_allocator := context.allocator
 	defer free_all(test_allocator)
-	nn := mlp(2, {4, 4, 1})
+	nn := mlp(2, {LayerOutputs{4, .tanh}, LayerOutputs{4, .tanh}, LayerOutputs{1, .tanh}})
 
 }
 
-@(private)
 params :: proc(mlp: ^MLP) -> []^Value {
 	num_params := 0
 	for l in mlp.layers {

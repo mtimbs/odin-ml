@@ -30,8 +30,6 @@ test_backward_tanh :: proc(t: ^testing.T) {
 	a := value(0.88137358701954316)
 	b := tanh(a)
 	b.grad = 1.0
-	print_value(a)
-	print_value(b)
 
 	// Act
 	backward_tanh(b)

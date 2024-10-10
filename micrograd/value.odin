@@ -5,16 +5,22 @@ import "core:fmt"
 import "core:testing"
 
 @(private)
-MAXIMUM_NODE_COUNT :: 10000
+MAXIMUM_NODE_COUNT :: 1000000
 
 Op :: enum {
 	add,
 	divide,
 	multiply,
 	power,
-	tanh,
+	relu,
 	subtract,
+	tanh,
 	value,
+}
+
+Activation :: enum {
+	relu,
+	tanh,
 }
 
 Value :: struct {

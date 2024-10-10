@@ -3,7 +3,6 @@ package micrograd
 import utils "../utils"
 import "core:testing"
 
-@(private)
 add :: proc(a: ^Value, b: ^Value) -> ^Value {
 	value := new(Value)
 	value^ = Value{a.val + b.val, 0.0, {a, b}, .add}
